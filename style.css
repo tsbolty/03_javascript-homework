@@ -1,0 +1,12 @@
+h1{
+    text-align: center;
+}
+
+#password-box{
+    margin: 30px;
+    border: 2px black dashed;
+}
+
+label{
+    text-align: center;
+}
