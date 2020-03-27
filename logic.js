@@ -1,16 +1,3 @@
-// need variables to hold special characters, letters, numbers
-alert("hello")
-//need to prompt user for how many of each kind of character to use( special characters, lower case letters, capitalized letters, numbers)
-
-//need to prompt user for length of desired password
-
-//need to validate answers from user to make sure they match the requirements
-
-//at least 1 character type will be selected
-
-//generate a random password to the users specifications
-
-//display the password or write it to the page
 
 
 
@@ -20,151 +7,117 @@ var upperLetterOptions = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
 var numberOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
 
 var passwordLength;
-var numLength;
-var lowerInput;
-var upperInput;
-var specialInput;
-var passwordResult;
+
+var userChoices =[]
 
 
+function getUserInput(){
+    
 
-function getLengthInput(){
-    passwordLength = prompt("How long would you like your password to be")
-    console.log(passwordLength)
-    validateLengthInput()
-}
+    var passwordLength = prompt("How long would you like your password to be?")
 
-function validateLengthInput(){
-    console.log('function called')
-    if (passwordLength < 8){
-        alert("You must select a number between 8 and 128");
-        getLengthInput()
-    } else{
-
-    }
-}
-getLengthInput()
-
-function getNumInput(){
-    numLength = prompt("how many numbers would you like in you password")
-    validateNumLength()
-}
-
-function validateNumLength(){
-    if (numLength < 1){
-        alert("you must have at least 1 number")
-        getNumInput()
+    if (passwordLength < 8 || passwordLength > 128){
+        alert("Password must be between 8 and 128 characters")
+        return
     } 
-}
-getNumInput()
 
-function getLowerInput(){
-    lowerLength = prompt("how many lower case numbers would you like in your password?")
-    validateLowerLength()
-
-}
-
-function validateLowerLength(){
-    if(lowerLength < 1){
-        alert("you must have at least 1 lower case letter")
-        getLowerInput()
+    if (isNaN(passwordLength)===true){
+        alert("Password must be a number")
+        return
     }
-}
-getLowerInput()
 
-function getUpperInput(){
-    upperLength = prompt("how many upper case letters would you like in your password")
-    validateUpperLength()
-    
-}
+    var wantsNumber = confirm("Do you want any numbers in your password?")
 
-function validateUpperLength(){
-    if (upperLength < 1){
-        alert("you must have at least 1 upper case letter in your password")
-        getUpperInput()
+
+    var wantsUpper = confirm("Do you want upper case letters in your password?")
+
+
+    var wantsLower = confirm("Do you want any lower cased letters in your password?")
+
+   
+    var wantsSpecial = confirm("Do you want any special characters in your password?")
+
+
+    if (
+        wantsLower == false &&
+        wantsUpper == false &&
+        wantsSpecial == false &&
+        wantsNumber == false
+    ){
+        alert("You must select at least one of these options, please try again")
+        return
     }
-}
-getUpperInput()
 
-function getSpecialInput(){
-    specialLength = prompt("how many special characters would you like in your password")
-    validateSpecialLength()
-}
+    var passwordOptions = {
 
-function validateSpecialLength(){
-    if (specialLength < 1){
-        alert("you must have at least 1 special character in your password")
-        getSpecialInput()
+        length: passwordLength,
+        wantsNumber: wantsNumber,
+        wantsUpper: wantsUpper,
+        wantsLower: wantsLower,
+        wantsSpecial: wantsSpecial
+
     }
-}
-getSpecialInput()
 
-function lengthValidation(){
-    if (numLength + upperLength + lowerLength + specialLength !== passwordLength){
-        alert("your preferences do not add up to desired password length")
-        getLengthInput()
-        getLowerInput()
-        getNumInput()
-        getSpecialInput()
-    } else{
-        alert(passwordResult)
+    return passwordOptions
+    
+
+
+}
+
+
+
+
+function getRandom(arr){
+    var randomIndex = Math.floor(Math.random() * arr.length)
+    var randomElement = arr[randomIndex]
+    return randomElement
+}
+
+
+
+function generatePassword(){
+    var options = getUserInput();
+    var guaranteedChars = [];
+    var possibleChars = [];
+    var passwordResult = [];
+
+    if (options.wantsSpecial){
+        possibleChars = possibleChars.concat(specialCharacterOptions)
+        guaranteedChars.push(getRandom(specialCharacterOptions))
     }
+    if (options.wantsNumber){
+        possibleChars = possibleChars.concat(numberOptions)
+        guaranteedChars.push(getRandom(numberOptions))
+    }
+    if (options.wantsUpper){
+        possibleChars = possibleChars.concat(upperLetterOptions)
+        guaranteedChars.push(getRandom(upperLetterOptions))
+    }
+    if (options.wantsLower){
+        possibleChars = possibleChars.concat(lowerLetterOptions)
+        guaranteedChars.push(getRandom(lowerLetterOptions))
+    }
+    for(i=0; i<options.length; i++){
+        var possibleChar = getRandom(possibleChars)
+        passwordResult.push(possibleChar)
+    }
+    for(i=0; i<guaranteedChars.length; i++){
+        passwordResult[i] = guaranteedChars[i]
+    }
+    console.log(passwordResult)
+    return passwordResult.join("")
+}
+var generateButton = document.querySelector("#generate")
+
+function writePassword() {
+  var password = generatePassword();
+  var passwordText = document.querySelector("#password");
+
+  passwordText.value = password;
+
 }
 
-for (var i = 0; i< numLength; i++){
-
-    
-    numLength = Math.floor(Math.random() * numOptions)
-    console.log(numLength)
-
-}
-//we need a function for each prompt to check the users input and validate it, if it is not valid, we need to loop back through
-
-// var characterSelections = prompt("How many special characters would you like in your password?")
-
-// if (characterSelections < 1){
-//     alert("You need at least 1 special character")
-// } else if (characterSelections > 125){
-//     alert("You cannot exceed 125 special characters")
-// }
-// // Math.floor(Math.random * specialCharacters.length)
-
-// var lowerSelections = prompt("How many lower case numbers would you like in your password?")
-
-// if (lowerSelections < 1){
-//     alert("You need at least 1 lower case letter")
-// } else if (lowerSelections > 125){
-//     alert("you cannot exceed 125 lower case letters")
-// }
-
-// // Math.floor(Math.random * lowerLetters.length)
-
-// var upperSelections = prompt("How many upper case letters would you like in your password?")
-
-// if (upperSelections < 1){
-//     alert("You need at least 1 upper case letter")
-// } else if (upperSelections > 125){
-//     alert("you cannot exceed 125 upper case letters")
-// }
-
-// // Math.floor(Math.random * upperLetters.length)
-
-// var userNumSelection = prompt("How many numbers would you like in your password?")
-
-// if (userNumSelection < 1){
-//     alert("You need at least 1 number")
-// } else if(userNumSelection > 125){
-//     alert("You cannot exceed 125 numbers")
-// }
-
-    
-// if (passwordLength < 8){
-//     alert("Password must be longer than 8 characters")
-// } else if (passwordLength > 128){
-//     alert("Password must be shorter than 128 characters")
-// } else{
-    
-// }
+generateButton.addEventListener("click", writePassword)
 
 
 
